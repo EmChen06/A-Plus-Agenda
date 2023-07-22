@@ -4,7 +4,7 @@ import java.awt.*;
 import java.time.*;
 import java.util.HashMap;
 
-public class APlusAgenda{
+public class aPlusAgenda{
 	final int W = 1920; // width
 	final int H = 1080; // height
 	final int HourHeight = 100;
@@ -20,10 +20,10 @@ public class APlusAgenda{
     // Font timeFont = Font("Montserrat", Font.PLAIN, 20);
 
     public static void main(String[] args) {
-		new APlusAgenda();
+		new aPlusAgenda();
     }
 
-    APlusAgenda() {
+    aPlusAgenda() {
     	setup();
     }
 
