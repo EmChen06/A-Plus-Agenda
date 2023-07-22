@@ -7,7 +7,15 @@ import java.util.HashMap;
 public class aPlusAgenda{
 	final int W = 1920; // width
 	final int H = 1080; // height
-	final int HourHeight = 100;
+
+	final int SidePadding = 50;
+	final int NumHours = 9; // 8 am to 4 pm
+	final int CalendarTop = 150;
+	final int CalendarBottom = 1000;
+	final int CalendarLeft = SidePadding;
+	final int CalendarRight = W - SidePadding;
+	final int HourHeight = (CalendarBottom - CalendarTop) / NumHours;
+	final int DayWidth = (W - SidePadding*2) / 7;
 
 	JFrame f;
 
@@ -32,16 +40,15 @@ public class aPlusAgenda{
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 		f.getContentPane().setBackground(new Color(223, 231, 255));
-		f.setSize(W,H);
+		f.setSize(W, H);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 
-		JPanel backPanel = new JPanel();
-		backPanel.setBackground(new Color(182, 190, 216));
-		backPanel.setBounds(0,0,W,500);
-		backPanel.setPreferredSize(new Dimension(100, 100));
-
-		f.add(backPanel, BorderLayout.NORTH);
+		//JPanel backPanel = new JPanel();
+		//backPanel.setBackground(new Color(182, 190, 216));
+		//backPanel.setBounds(0,0,W,500);
+		//backPanel.setPreferredSize(new Dimension(100, 100));
+		//f.add(backPanel, BorderLayout.NORTH);
 
 		JPanel linePanel = new JPanel() {
 			@Override
@@ -67,18 +74,23 @@ public class aPlusAgenda{
 		drawLines(g);
     	//dates MAY CHANGE LATER BASED ON IMPORTED DATA??
     	g.drawString("June 2023", 830, 70);
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < NumHours; i++) {
 			// times are 8 am to 4 pm
-			g.drawString((i + 8) + "am", 0, 155 + i * HourHeight);
+			int twentyFourHour = i + 8;
+			String amOrPm = twentyFourHour <= 11 ? "am" : "pm";
+			int twelveHour = (twentyFourHour - 1) % 12 + 1;
+			g.drawString(twelveHour + amOrPm, 8, CalendarTop + i * HourHeight + HourHeight/2);
 		}
     }
 
 	void drawLines(Graphics g) {
-		for (int y = 150; y <= 1050; y += HourHeight) {
-			g.drawLine(50, y, W, y);
+		for (int i = 0; i <= NumHours; i++) {
+			int y = CalendarTop + i * HourHeight;
+			g.drawLine(CalendarLeft, y, CalendarRight, y);
 		}
-		for (int x = 50; x <= 1670; x += 270) {
-			g.drawLine(x, 100, x, H);
+		for (int i = 0; i <= 8; i++) {
+			int x = CalendarLeft + i * DayWidth;
+			g.drawLine(x, CalendarTop, x, CalendarBottom);
 		}
 	}
 }
