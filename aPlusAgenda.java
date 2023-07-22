@@ -5,27 +5,28 @@ import java.time.*;
 import java.util.HashMap;
 
 public class APlusAgenda{
-	final int W = 1920;//width
-	final int H = 1080;//height
+	final int W = 1920; // width
+	final int H = 1080; // height
+	final int HourHeight = 100;
+
 	JFrame f;
 
-	HashMap<LocalDate, ArrayList<Event>> events = new HashMap<LocalDate, ArrayList<Event>>();
+	//HashMap<LocalDate, ArrayList<Event>> events = new HashMap<LocalDate, ArrayList<Event>>();
 
     // Color lineColor = Color(182, 190, 216, 104);
     // Color textColor = Color(23, 44, 112);
     // Font typeFont = Font("Montserrat", Font.BOLD, 24);
     // Font monthFont = Font("Montserrat", Font.PLAIN, 56);
     // Font timeFont = Font("Montserrat", Font.PLAIN, 20);
-	
+
     public static void main(String[] args) {
 		new APlusAgenda();
     }
 
     APlusAgenda() {
     	setup();
-        // weeklyView();
     }
-    
+
     void setup() {
 		f = new JFrame ("A+ Agenda");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,65 +51,34 @@ public class APlusAgenda{
 				g.setColor(new Color(182, 190, 216));
 				((Graphics2D) g).setStroke(new BasicStroke(2));
 
-				g.drawLine(50, 150, W, 150);
-				g.drawLine(50, 250, W, 250); 
-				g.drawLine(50, 350, W, 350); 
-				g.drawLine(50, 450, W, 450); 
-				g.drawLine(50, 550, W, 550); 
-				g.drawLine(50, 650, W, 650); 
-				g.drawLine(50, 750, W, 750); 
-				g.drawLine(50, 850, W, 850); 
-				g.drawLine(50, 950, W, 950); 
-				g.drawLine(50, 1050, W, 1050);
-				g.drawLine(50, 100, 50, H);
-				g.drawLine(320, 100, 320, H);
-				g.drawLine(590, 100, 590, H);
-				g.drawLine(860, 100, 860, H);
-				g.drawLine(1130, 100, 1130, H);
-				g.drawLine(1400, 100, 1400, H);
-				g.drawLine(1670, 100, 1670, H);
-
+				weeklyView(g);
 			}
 		};
 
 		f.add(linePanel, BorderLayout.CENTER);
 
-		
+
     	// f.setColor(Color(182, 190, 216));
-		// gc.fillRect(0,0,W,100);
+		// g.fillRect(0,0,W,100);
 
     }
-    
-    void weeklyView() {
 
-    	// //times
-    	// gc.drawLine(50, 150, W, 150);
-    	// gc.drawLine(50, 250, W, 250); 
-    	// gc.drawLine(50, 350, W, 350); 
-    	// gc.drawLine(50, 450, W, 450); 
-    	// gc.drawLine(50, 550, W, 550); 
-    	// gc.drawLine(50, 650, W, 650); 
-    	// gc.drawLine(50, 750, W, 750); 
-    	// gc.drawLine(50, 850, W, 850); 
-    	// gc.drawLine(50, 950, W, 950); 
-    	// gc.drawLine(50, 1050, W, 1050);
-    	// gc.drawLine(50, 100, 50, H);
-    	// gc.drawLine(320, 100, 320, H);
-    	// gc.drawLine(590, 100, 590, H);
-    	// gc.drawLine(860, 100, 860, H);
-    	// gc.drawLine(1130, 100, 1130, H);
-    	// gc.drawLine(1400, 100, 1400, H);
-    	// gc.drawLine(1670, 100, 1670, H);
-    	// //dates MAY CHANGE LATER BASED ON IMPORTED DATA??
-    	// gc.drawString("June 2023", 830, 70);
-    	// gc.drawString("8am", 0, 155);
-    	// gc.drawString("9am", 0, 255);
-    	// gc.drawString("10am", 0, 355);
-    	// gc.drawString("11am", 0, 455);
-    	// gc.drawString("12pm", 0, 555);
-    	// gc.drawString("1pm", 0, 655);
-    	// gc.drawString("2pm", 0, 755);
-    	// gc.drawString("3pm", 0, 855);
-    	// gc.drawString("4pm", 0, 955);
+    void weeklyView(Graphics g) {
+		drawLines(g);
+    	//dates MAY CHANGE LATER BASED ON IMPORTED DATA??
+    	g.drawString("June 2023", 830, 70);
+		for (int i = 0; i < 9; i++) {
+			// times are 8 am to 4 pm
+			g.drawString((i + 8) + "am", 0, 155 + i * HourHeight);
+		}
     }
+
+	void drawLines(Graphics g) {
+		for (int y = 150; y <= 1050; y += HourHeight) {
+			g.drawLine(50, y, W, y);
+		}
+		for (int x = 50; x <= 1670; x += 270) {
+			g.drawLine(x, 100, x, H);
+		}
+	}
 }
