@@ -3,19 +3,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.*;
 import java.util.HashMap;
+import java.time.format.TextStyle;
 
 public class aPlusAgenda extends JFrame {
 	final int W = 1920; // width
 	final int H = 1080; // height
 
-	final int SidePadding = 50;
-	final int NumHours = 9; // 8 am to 4 pm
+	final int StartingHour = 8;
+	final int NumHours = 9; // 8 am (StartingHour) to 4 pm
 	final int CalendarTop = 150;
 	final int CalendarBottom = 1000;
-	final int CalendarLeft = SidePadding;
-	final int CalendarRight = W - SidePadding;
+	final int CalendarLeft = 100;
+	final int CalendarRight = W - 50;
 	final int HourHeight = (CalendarBottom - CalendarTop) / NumHours;
-	final int DayWidth = (W - SidePadding*2) / 7;
+	final int DayWidth = (CalendarRight - CalendarLeft) / 7;
+
+	LocalDate sundayToDisplay; // for weekly view, the sunday of the week we're displaying
 
 	//JFrame f;
 
@@ -31,7 +34,14 @@ public class aPlusAgenda extends JFrame {
 		new aPlusAgenda();
     }
 
+	LocalDate lastSunday(LocalDate ld) {
+		DayOfWeek d = ld.getDayOfWeek();
+		int daysSinceSunday = d.getValue() % 7;
+		return ld.minusDays(daysSinceSunday);
+	}
+
     aPlusAgenda() {
+		sundayToDisplay = lastSunday(LocalDate.now());
     	setup();
     }
 
@@ -69,17 +79,19 @@ public class aPlusAgenda extends JFrame {
 	}
 	
 
+	public void drawCentredString(Graphics g, String text, int x, int y) {
+	    FontMetrics fm = g.getFontMetrics(g.getFont());
+	    int newX = x - fm.stringWidth(text)/2;
+	    int newY = y + fm.getHeight()/2 - fm.getAscent()/2; // this doesn't work properly but looks centred enough to me
+	    g.drawString(text, newX, newY);
+	}
+
     void weeklyView(Graphics g) {
 		drawLines(g);
     	//dates MAY CHANGE LATER BASED ON IMPORTED DATA??
-    	g.drawString("June 2023", 830, 70);
-		for (int i = 0; i < NumHours; i++) {
-			// times are 8 am to 4 pm
-			int twentyFourHour = i + 8;
-			String amOrPm = twentyFourHour <= 11 ? "am" : "pm";
-			int twelveHour = (twentyFourHour - 1) % 12 + 1;
-			g.drawString(twelveHour + amOrPm, 8, CalendarTop + i * HourHeight + HourHeight/2);
-		}
+    	drawCentredString(g, "June 2023", W/2, CalendarTop * 2/5);
+		drawTimes(g);
+		drawDates(g);
     }
 
 	void drawLines(Graphics g) {
@@ -90,6 +102,25 @@ public class aPlusAgenda extends JFrame {
 		for (int i = 0; i <= 8; i++) {
 			int x = CalendarLeft + i * DayWidth;
 			g.drawLine(x, CalendarTop, x, CalendarBottom);
+		}
+	}
+
+	void drawTimes(Graphics g) {
+		for (int i = 0; i < NumHours; i++) {
+			int twentyFourHour = i + StartingHour;
+			String amOrPm = twentyFourHour <= 11 ? "am" : "pm";
+			int twelveHour = (twentyFourHour - 1) % 12 + 1;
+			drawCentredString(g, twelveHour + " " + amOrPm, CalendarLeft / 2, CalendarTop + i * HourHeight + HourHeight/2);
+		}
+	}
+
+	void drawDates(Graphics g) {
+		for (int i = 0; i < 7; i++) {
+			LocalDate date = sundayToDisplay.plusDays(i);
+			int day = date.getDayOfMonth();
+			String dayName = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
+			int x = CalendarLeft + i * DayWidth + DayWidth / 2;
+			drawCentredString(g, dayName + ", " + day, x, CalendarTop * 4/5);
 		}
 	}
 }
