@@ -68,7 +68,7 @@ public class aPlusAgenda extends JFrame {
 	HashMap<LocalDate, ArrayList<Plan>> events = new HashMap<LocalDate, ArrayList<Plan>>();
 
     Color lineColor = new Color(182, 190, 216, 104);
-    Color textColor = new Color(23, 44, 112, 50);
+    Color textColor = new Color(23, 44, 112);
 	final Color BackgroundColour = new Color(223, 231, 255);
     Font monthFont = new Font("Bahnschrift", Font.PLAIN, 56);
     Font dayFont = new Font("Bahnschrift", Font.BOLD, 24);
